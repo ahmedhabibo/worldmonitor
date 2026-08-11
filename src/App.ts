@@ -2081,6 +2081,12 @@ export class App {
       await this.dataLoader.hydrateHappyPanelsFromCache();
     }
 
+    // Sudan variant: fit the flat map to Sudan's bbox on first load
+    // (desktop non-mobile only — mobile keeps its geo-coords centering).
+    if (SITE_VARIANT === 'sudan' && !this.state.isMobile && this.state.map && typeof (this.state.map as any).fitCountry === 'function') {
+      (this.state.map as any).fitCountry('SD');
+    }
+
     // Phase 2: Shared UI components
     if (!this.state.isMobile) {
       void this.initFindingsBadge();
