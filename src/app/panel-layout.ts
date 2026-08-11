@@ -191,6 +191,7 @@ export const VARIANT_SWITCHER_DASHBOARD_URLS = {
   commodity: 'https://commodity.worldmonitor.app/dashboard',
   energy: 'https://energy.worldmonitor.app/dashboard',
   happy: 'https://happy.worldmonitor.app/dashboard',
+  sudan: 'https://sudan.worldmonitor.app/dashboard',
 } as const;
 
 export function variantSwitcherHref(
