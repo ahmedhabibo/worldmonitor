@@ -1112,7 +1112,80 @@ const ENERGY_MOBILE_MAP_LAYERS: MapLayers = {
 // UNIFIED PANEL REGISTRY
 // ============================================
 
-type PanelVariant = 'full' | 'tech' | 'finance' | 'commodity' | 'energy' | 'happy';
+type PanelVariant = 'full' | 'tech' | 'finance' | 'commodity' | 'energy' | 'happy' | 'sudan';
+
+// ============================================
+// SUDAN VARIANT (Sudan-focused intelligence)
+// ============================================
+const SUDAN_PANELS: Record<string, PanelConfig> = {
+  map: { name: 'Global Map', enabled: true, priority: 1 },
+  'live-news': { name: 'Live News', enabled: true, priority: 1 },
+  intel: { name: 'Intel Feed', enabled: true, priority: 1 },
+  'gdelt-intel': { name: 'Live Intelligence', enabled: true, priority: 1 },
+  cii: { name: 'Country Instability', enabled: true, priority: 1 },
+  africa: { name: 'Africa', enabled: true, priority: 1 },
+  'strategic-risk': { name: 'Strategic Risk Overview', enabled: true, priority: 1 },
+  cascade: { name: 'Infrastructure Cascade', enabled: true, priority: 1 },
+  politics: { name: 'World News', enabled: true, priority: 1 },
+};
+
+const SUDAN_MAP_LAYERS: MapLayers = {
+  gpsJamming: false,
+  satellites: false,
+  conflicts: true,
+  bases: false,
+  cables: false,
+  pipelines: false,
+  hotspots: true,
+  ais: false,
+  nuclear: true,
+  irradiators: false,
+  sanctions: true,
+  weather: true,
+  economic: false,
+  waterways: true,
+  outages: true,
+  cyberThreats: false,
+  datacenters: false,
+  protests: true,
+  flights: false,
+  military: false,
+  natural: true,
+  spaceports: false,
+  minerals: false,
+  fires: true,
+  ucdpEvents: true,
+  displacement: true,
+  climate: false,
+  startupHubs: false,
+  cloudRegions: false,
+  accelerators: false,
+  techHQs: false,
+  techEvents: false,
+  stockExchanges: false,
+  financialCenters: false,
+  centralBanks: false,
+  commodityHubs: false,
+  gulfInvestments: false,
+  positiveEvents: false,
+  kindness: false,
+  happiness: false,
+  speciesRecovery: false,
+  renewableInstallations: false,
+  tradeRoutes: false,
+  iranAttacks: false,
+  ciiChoropleth: true,
+  resilienceScore: false,
+  dayNight: false,
+  miningSites: false,
+  processingPlants: false,
+  commodityPorts: false,
+  webcams: false,
+  diseaseOutbreaks: true,
+};
+
+// Mobile uses the same Sudan layers as desktop for now.
+const SUDAN_MOBILE_MAP_LAYERS: MapLayers = { ...SUDAN_MAP_LAYERS };
 
 const VARIANT_PANEL_CONFIGS: Record<PanelVariant, Record<string, PanelConfig>> = {
   full: FULL_PANELS,
@@ -1121,7 +1194,8 @@ const VARIANT_PANEL_CONFIGS: Record<PanelVariant, Record<string, PanelConfig>> =
   commodity: COMMODITY_PANELS,
   energy: ENERGY_PANELS,
   happy: HAPPY_PANELS,
-};
+    sudan: SUDAN_PANELS,
+  };
 
 function getVariantPanelConfigs(variant: string): Record<string, PanelConfig> | undefined {
   return Object.prototype.hasOwnProperty.call(VARIANT_PANEL_CONFIGS, variant)
@@ -1147,6 +1221,7 @@ export const VARIANT_DEFAULTS: Record<string, string[]> = {
   commodity: Object.keys(VARIANT_PANEL_CONFIGS.commodity),
   energy:    Object.keys(VARIANT_PANEL_CONFIGS.energy),
   happy:     Object.keys(VARIANT_PANEL_CONFIGS.happy),
+  sudan:     Object.keys(VARIANT_PANEL_CONFIGS.sudan),
 };
 
 /**
@@ -1406,7 +1481,9 @@ export const DEFAULT_MAP_LAYERS = SITE_VARIANT === 'happy'
         ? COMMODITY_MAP_LAYERS
         : SITE_VARIANT === 'energy'
           ? ENERGY_MAP_LAYERS
-          : FULL_MAP_LAYERS;
+          : SITE_VARIANT === 'sudan'
+            ? SUDAN_MAP_LAYERS
+            : FULL_MAP_LAYERS;
 
 export const MOBILE_DEFAULT_MAP_LAYERS = SITE_VARIANT === 'happy'
   ? HAPPY_MOBILE_MAP_LAYERS
@@ -1415,10 +1492,12 @@ export const MOBILE_DEFAULT_MAP_LAYERS = SITE_VARIANT === 'happy'
     : SITE_VARIANT === 'finance'
       ? FINANCE_MOBILE_MAP_LAYERS
       : SITE_VARIANT === 'commodity'
-        ? COMMODITY_MOBILE_MAP_LAYERS
-        : SITE_VARIANT === 'energy'
-          ? ENERGY_MOBILE_MAP_LAYERS
-          : FULL_MOBILE_MAP_LAYERS;
+              ? COMMODITY_MOBILE_MAP_LAYERS
+              : SITE_VARIANT === 'energy'
+                ? ENERGY_MOBILE_MAP_LAYERS
+                : SITE_VARIANT === 'sudan'
+                  ? SUDAN_MOBILE_MAP_LAYERS
+                  : FULL_MOBILE_MAP_LAYERS;
 
 /** Maps map-layer toggle keys to their data-freshness source IDs (single source of truth). */
 export const LAYER_TO_SOURCE: Partial<Record<keyof MapLayers, DataSourceId[]>> = {
