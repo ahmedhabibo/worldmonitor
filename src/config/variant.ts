@@ -44,10 +44,14 @@ export const SITE_VARIANT: string = (() => {
   if (h.startsWith('happy.')) return 'happy';
   if (h.startsWith('commodity.')) return 'commodity';
   if (h.startsWith('energy.')) return 'energy';
+  if (h.startsWith('sudan.')) return 'sudan';
 
   if (h === 'localhost' || h === '127.0.0.1') {
     const stored = loadStoredVariant();
     if (isSiteVariant(stored)) return stored;
+    // Dev: ?variant=sudan (or any valid variant) boots straight into it.
+    const qs = typeof URLSearchParams !== 'undefined' ? new URLSearchParams(location.search).get('variant') : null;
+    if (isSiteVariant(qs)) return qs;
     return buildVariant;
   }
 
